@@ -6,6 +6,7 @@ import { animate } from 'motion'
 import { Inter } from 'next/font/google'
 import { inter } from '../fonts'
 import ColorPage from './UI/ColorPage'
+import ProductKnow from './UI/ProductKnow'
 
 const page = () => {
 
@@ -91,7 +92,7 @@ const page = () => {
                 style={{
                     opacity:FirstTextOpacity,
                 }}
-                className={`text-4xl text-white absolute bottom-55 left-8 z-50 ${inter}  ` }
+                className={`text-4xl text-white absolute bottom-55 left-8 z-50 ${inter.className}  ` }
                 >
                  Acoustics, Perfected
             </motion.h1>
@@ -134,7 +135,9 @@ const page = () => {
 
         </motion.section>
 
-        <ColorPage/>
+                
+         <ProductKnow/>       
+
     </motion.div>
   )
 }
