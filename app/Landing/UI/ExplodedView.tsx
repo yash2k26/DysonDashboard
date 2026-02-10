@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useSpring, useTransform } from "motion/react"
+import { oswald } from '@/app/fonts'
 
 const ExplodedView = () => {
     const containerRef = useRef<HTMLDivElement>(null)
@@ -21,11 +22,21 @@ const ExplodedView = () => {
         restDelta: 0.001
     })
 
-    // Total frames available in public/framuu-jpg
-    // Filenames: ezgif-frame-00.jpg to ezgif-frame-040.jpg
-    const frameCount = 41
+    // Text animations
+    // Block 1: Intro
+    const opacity1 = useTransform(smoothProgress, [0.1, 0.2, 0.3], [0, 1, 0])
+    const y1 = useTransform(smoothProgress, [0.1, 0.2, 0.3], [100, 0, -100])
 
-    // Map scroll (0 to 1) to frame index (0 to 40)
+    // Block 2: Middle phase
+    const opacity2 = useTransform(smoothProgress, [0.45, 0.55, 0.65], [0, 1, 0])
+    const y2 = useTransform(smoothProgress, [0.45, 0.55, 0.65], [100, 0, -100])
+
+    // Block 3: Conclusion
+    const opacity3 = useTransform(smoothProgress, [0.8, 0.9, 0.98], [0, 1, 0])
+    const y3 = useTransform(smoothProgress, [0.8, 0.9, 0.98], [100, 0, -100])
+
+    // Total frames available in public/framuu-jpg
+    const frameCount = 41
     const frameIndex = useTransform(smoothProgress, [0, 1], [0, frameCount - 1])
 
     useEffect(() => {
@@ -34,9 +45,6 @@ const ExplodedView = () => {
 
             for (let i = 0; i < frameCount; i++) {
                 const img = new Image()
-                // Construct filename: ezgif-frame-00.jpg, 01.jpg ... 010.jpg
-                // The numbering seems to be: 'ezgif-frame-0' + number + '.jpg'
-                // verifying: 0 -> 00, 5 -> 05, 10 -> 010
                 const src = `/framuu-jpg/ezgif-frame-0${i}.jpg`
 
                 img.src = src
@@ -60,7 +68,6 @@ const ExplodedView = () => {
     useEffect(() => {
         if (!isLoaded || images.length === 0) return
 
-        // Render loop or change listener
         const unsubscribe = frameIndex.on("change", (latest) => {
             const canvas = canvasRef.current
             if (!canvas) return
@@ -72,12 +79,9 @@ const ExplodedView = () => {
             const img = images[imageIndex]
 
             if (img) {
-                // Ensure canvas size matches image or window aspect ratio
-                // Ideally this reasoning happens once or on resize, but for simplicity here:
                 canvas.width = window.innerWidth
                 canvas.height = window.innerHeight
 
-                // "Cover" logic for drawing image
                 const scale = Math.max(canvas.width / img.width, canvas.height / img.height)
                 const x = (canvas.width / 2) - (img.width / 2) * scale
                 const y = (canvas.height / 2) - (img.height / 2) * scale
@@ -87,7 +91,6 @@ const ExplodedView = () => {
             }
         })
 
-        // Initial draw
         const initialIndex = Math.round(frameIndex.get())
         if (images[initialIndex] && canvasRef.current) {
             const canvas = canvasRef.current
@@ -119,10 +122,25 @@ const ExplodedView = () => {
                     ref={canvasRef}
                     className="absolute inset-0 w-full h-full object-cover"
                 />
-                {/* Optional overlay text */}
+
+                {/* Scroll-triggered text blocks */}
                 <motion.div
-                    style={{ opacity: useTransform(smoothProgress, [0.8, 1], [0, 1]) }}
-                    className="absolute bottom-20 left-1/2 -translate-x-1/2 text-white text-4xl font-light z-10"
+                    style={{ opacity: opacity1, y: y1 }}
+                    className={`absolute text-white text-8xl font-bold z-10 text-center ${oswald.className}`}
+                >
+                    Experience Every Layer
+                </motion.div>
+
+                <motion.div
+                    style={{ opacity: opacity2, y: y2 }}
+                    className={`absolute text-white text-8xl font-bold z-10 text-center ${oswald.className}`}
+                >
+                    Engineering Excellence
+                </motion.div>
+
+                <motion.div
+                    style={{ opacity: opacity3, y: y3 }}
+                    className={`absolute text-white text-8xl font-bold z-10 text-center ${oswald.className}`}
                 >
                     Precision Engineering
                 </motion.div>
