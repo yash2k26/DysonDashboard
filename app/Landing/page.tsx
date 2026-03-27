@@ -5,7 +5,6 @@ import Image from 'next/image'
 import { animate } from 'motion'
 import { Inter } from 'next/font/google'
 import { inter } from '../fonts'
-import ColorPage from './UI/ColorPage'
 import ProductKnow from './UI/ProductKnow'
 
 const page = () => {
@@ -47,8 +46,8 @@ const page = () => {
     const Button = useTransform(scrollYProgress,[0.5,0.85],[20,0])
     const ButtonOpacity = useTransform(scrollYProgress,[0.7,0.85],[0,1])
 
-    const blur = useTransform(scrollYProgress,[0,300],[0,10])
-    const filter = useMotionTemplate`blur${blur}px`
+    const blur = useTransform(scrollYProgress,[0.85,1],[0,10])
+    const filter = useMotionTemplate`blur(${blur}px)`
 
     const smoothFrame = useSpring(frameIndex,{
         stiffness : 120,
@@ -88,21 +87,23 @@ const page = () => {
                     // }} 
                     />
             <div className='max-h-screen bg-white z-50  '>                    
-            <motion.h1 
+            <motion.h1
                 style={{
                     opacity:FirstTextOpacity,
+                    y: FirstText,
                 }}
-                className={`text-4xl text-white absolute bottom-55 left-8 z-50 ${inter.className}  ` }
+                className={`text-4xl text-white absolute bottom-55 left-8 z-50 ${inter.className}` }
                 >
                  Acoustics, Perfected
             </motion.h1>
             </div>
 
             <motion.h1
-            style={{
-                opacity:SubTextOpacity
-            }}
-                className={`text-5xl text-white absolute bottom-40 right-8 z-50 ${inter}  ` }
+                style={{
+                    opacity:SubTextOpacity,
+                    y: SubText,
+                }}
+                className={`text-5xl text-white absolute bottom-40 right-8 z-50 ${inter.className}`}
             >
                 Crafted for Clarity
             </motion.h1>
@@ -116,11 +117,12 @@ const page = () => {
                 }}
                 draggable={false}
                 style={{
-                    opacity:ButtonOpacity
+                    opacity:ButtonOpacity,
+                    y: Button,
                 }}
-                className={`-translate-x-1/2 -translate-y-1/2 flex flex-col gap-1.5 mx-auto text-white absolute top-1/2 left-1/2  ` }
-            >   
-                <h2 draggable={false} className=  {`text-5xl ${inter} `}>
+                className={`-translate-x-1/2 -translate-y-1/2 flex flex-col gap-1.5 mx-auto text-white absolute top-1/2 left-1/2`}
+            >
+                <h2 draggable={false} className={`text-5xl ${inter.className}`}>
                     Experience the Difference
                 </h2>    
                 <motion.button
